@@ -1,0 +1,31 @@
+<div class="container position-absolute top-50 start-50 translate-middle">
+  <form [formGroup]="signUpform">
+    <mat-card class="example-card">
+      <h3 class="text-center text-primary mt-3">{{authValue?"Sign Up":"Login"}}</h3>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput placeholder="Email..." formControlName="email"/>
+        <mat-error *ngIf="signUpform.hasError('email') && !signUpform.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="signUpform.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="email" matInput placeholder="Password" formControlName="password"/>
+        <mat-error *ngIf="signUpform.hasError('email') && !signUpform.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="signUpform.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <div class="col text-center">
+        <button mat-raised-button color="primary" (click)="getAuthValue()" type="submit">{{authValue?"Sign Up":"Login"}}</button>
+      </div>
+    </mat-card>
+  </form>
+</div>
