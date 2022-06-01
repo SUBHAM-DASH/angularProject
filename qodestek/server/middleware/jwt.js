@@ -1,50 +1,26 @@
 const jwt = require("jsonwebtoken");
-const User = require("../model/User.model");
-const jwtSecret = "qudestek";
+const UserModel = require("../model/User.model");
 
-//------------------------------ Auth ------------------------------//
-
-exports.auth = (req, res, next) => {
+var checkUserAuth = async (req, res,next) => {
   let token;
-  const bearerHeader = req.header("Authorization");
-
-  if (!bearerHeader) {
-    return res.status(401).json({ message: "No token, authorization denied!" });
-  }
-
-  let parts = bearerHeader.split(" ");
-  if (parts.length === 2) {
-    let scheme = parts[0];
-    let credentials = parts[1];
-    token = credentials;
-  } else {
-    return res.status(401).json({ message: "token format is not valid!" });
-  }
-
-  if (!token) {
-    return res.status(401).json({ message: "No token, authorization denied!" });
-  } else {
+  const { authorization } = req.headers;
+  if (authorization && authorization.startsWith("Bearer")) {
     try {
-      const decoded = jwt.verify(token, config.get("jwtSecret"));
-      if (decoded._id === "explore") {
-        next();
-      } else {
-        if (decoded) {
-          User.findOne({ _id: decoded._id }).then((user) => {
-            if (user) {
-              if (user.token.toString() == token.toString()) {
-                next();
-              } else {
-                return res.status(400).json({ message: "token is not valid" });
-              }
-            } else {
-              return res.status(400).json({ message: "token is not valid" });
-            }
-          });
-        }
-      }
-    } catch (e) {
-      return res.status(400).json({ message: "token is not valid" });
+      //Get token from Header
+      token = authorization.split(" ")[1];
+
+      //Verify Token
+      const { userID } = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+      //Getuser form Token
+      req.user=await UserModel.findById(userID).select('-password');
+      next();
+    } catch (error) {
+      return res.json({"status":"failed","message":"UnAuthorized error"});
     }
   }
+  if(!token){
+    res.json({"status":"failed","message":"UnAuthorized Error, No token"})
+  }
 };
+module.exports = checkUserAuth;

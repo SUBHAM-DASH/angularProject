@@ -1,14 +1,23 @@
 const express = require("express");
 const connectTOmongoose = require("./db");
 connectTOmongoose();
-
+const bodyParser=require('body-parser');
+const cors=require('cors');
 const app=express();
-const port=3000;
+require('dotenv').config();
+const userRouter = require('./routes/auth.router');
+const dotenv= require('dotenv');
+const port = process.env.PORT || 3000;
+dotenv.config();
 
-app.use(express.json);
+//Middleware
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(cors());
+
 
 // Available routes
-app.use("/api/auth",require('./routes/auth.router'));
+app.use("/api/user",userRouter);
 
 app.listen(port,()=>{
   console.log(`app running on port ${port}`);
