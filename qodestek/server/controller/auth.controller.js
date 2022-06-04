@@ -42,8 +42,8 @@ class UserController {
       const { email, password } = req.body;
       if (email && password) {
         const user = await UserModel.findOne({ email: email });
-        if (!user) {
-          return res.json({
+        if (user == null) {
+          res.json({
             status: "failed",
             message: "all fields are required",
           });
@@ -87,6 +87,6 @@ class UserController {
       return res.json({"status":"failed","message":"all fields are required"});
     }
   };
-  
+  //1.36
 }
 module.exports = UserController;
