@@ -39,7 +39,7 @@ class ProductDetails {
     try {
       const WISHLIST = await Products.findOne({ _id: id, isWishlisted: user });
       if (WISHLIST) {
-        return res.json({ message: "Already Added in Wishlist" });
+        return res.json({ status: "success",message: "Already Added in Wishlist" });
       }
       await Products.updateOne({ _id: id }, { $push: { isWishlisted: user } });
       res.json({ status: "success", message: "Added In Wishlist" });
@@ -95,7 +95,6 @@ class ProductDetails {
     try {
       const user = req.user._id.toString();
       const { id } = req.body;
-      console.log(user);
       await Products.updateOne({_id:id}, {$pull:{isWishlisted:{$in:[user]}}});
       res.json({ message: "removed from wishlist" });
     } catch (error) {

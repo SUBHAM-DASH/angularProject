@@ -13,4 +13,16 @@ export class ProductService {
   getAllproduct() {
     return this.http.get(this.url+"/api/product/getallproduct");
   }
+
+  addToWishList(data:any){
+    return this.http.put(this.url+"/api/product/addtowishlist",{id:data});
+  }
+
+  removefromWishList(data:any){
+    return this.http.post(this.url+"/api/product/removewishlistproduct",{id:data})
+  }
+
+  allwishlistedProduct(){
+    return this.http.get(this.url+"/api/product/allwishlistproducts");
+  }
 }

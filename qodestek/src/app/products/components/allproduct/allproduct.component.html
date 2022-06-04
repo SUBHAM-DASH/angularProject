@@ -1,7 +1,7 @@
 <div class="container">
   <h2 class="text-center">Products On Sale</h2>
   <div class="row">
-    <ng-container *ngFor="let item of finalData">
+    <ng-container *ngFor="let item of finalData;let i=index;">
       <div class="col-md-4 my-3">
         <div class="card" style="width: 18rem;">
           <img src="../../../../assets/image//mobile.webp" class="card-img-top" alt="image not found">
@@ -9,7 +9,9 @@
             <h5 class="card-title">{{item.product_name}}</h5>
             <div><strong>DOM :{{item.dom}}</strong></div>
             <span class="badge bg-success">Price : {{item.price}}</span>
-            <i class="fa fa-heart text-dark pull-right mx-3" style="font-size: 25px; cursor: pointer;" aria-hidden="true" (click)="addinWishlist(item._id)"></i>
+            <div (click)="addinWishlist(item._id,i+1)" [hidden]="hide">
+              <i class="fa fa-heart pull-right mx-3 " [ngStyle]="num === i+1 ? class1:class2"  style="font-size: 25px; cursor: pointer;" aria-hidden="true"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -17,8 +19,7 @@
   </div>
 
   <div class="d-flex justify-content-around my-3">
-    <button class="btn btn-dark">Previous</button>
-    <button class="btn btn-dark">Next</button>
+    <pagination [totalItems]="finalData.length"></pagination>
   </div>
 </div>
 
